@@ -9,6 +9,7 @@ from alembic import command
 from alembic.config import Config
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
+from sqlalchemy.pool import NullPool
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
@@ -28,7 +29,7 @@ TEST_DATABASE_URL = os.getenv(
 os.environ["DATABASE_URL"] = TEST_DATABASE_URL
 
 
-engine = create_async_engine(TEST_DATABASE_URL, pool_pre_ping=True)
+engine = create_async_engine(TEST_DATABASE_URL, poolclass=NullPool)
 SessionFactory = async_sessionmaker(
     bind=engine,
     expire_on_commit=False,
