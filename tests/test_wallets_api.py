@@ -95,8 +95,12 @@ async def test_concurrent_withdrawals_do_not_allow_overspending(
         ]
     )
 
-    success_responses = [response for response in responses if response.status_code == 200]
-    failed_responses = [response for response in responses if response.status_code == 400]
+    success_responses = [
+        response for response in responses if response.status_code == 200
+    ]
+    failed_responses = [
+        response for response in responses if response.status_code == 400
+    ]
 
     assert len(success_responses) == 3
     assert len(failed_responses) == 2

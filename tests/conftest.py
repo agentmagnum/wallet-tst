@@ -9,7 +9,15 @@ from alembic import command
 from alembic.config import Config
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import (
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
+
+from app.db.models import Wallet
+from app.db.session import get_db_session
+from app.main import app
 
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
@@ -18,10 +26,6 @@ TEST_DATABASE_URL = os.getenv(
     "postgresql+asyncpg://postgres:postgres@localhost:5432/wallet_db",
 )
 os.environ["DATABASE_URL"] = TEST_DATABASE_URL
-
-from app.db.models import Wallet
-from app.db.session import get_db_session
-from app.main import app
 
 
 engine = create_async_engine(TEST_DATABASE_URL, pool_pre_ping=True)
@@ -58,7 +62,10 @@ async def clear_wallets_table(migrated_database):
 @pytest_asyncio.fixture
 async def client():
     transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://testserver") as api_client:
+    async with AsyncClient(
+        transport=transport,
+        base_url="http://testserver",
+    ) as api_client:
         yield api_client
 
 

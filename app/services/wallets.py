@@ -30,9 +30,15 @@ class WalletService:
     ) -> Wallet:
         async with self.session.begin():
             if payload.operation_type == OperationType.DEPOSIT:
-                wallet = await self._deposit(wallet_id=wallet_id, amount=payload.amount)
+                wallet = await self._deposit(
+                    wallet_id=wallet_id,
+                    amount=payload.amount,
+                )
             else:
-                wallet = await self._withdraw(wallet_id=wallet_id, amount=payload.amount)
+                wallet = await self._withdraw(
+                    wallet_id=wallet_id,
+                    amount=payload.amount,
+                )
         return wallet
 
     async def _deposit(self, wallet_id: UUID, amount) -> Wallet:

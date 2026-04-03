@@ -18,7 +18,10 @@ async def apply_wallet_operation(
     session: AsyncSession = Depends(get_db_session),
 ) -> WalletResponse:
     service = WalletService(session)
-    wallet = await service.apply_operation(wallet_id=wallet_id, payload=payload)
+    wallet = await service.apply_operation(
+        wallet_id=wallet_id,
+        payload=payload,
+    )
     return WalletResponse.model_validate(wallet)
 
 
